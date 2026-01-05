@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <title>瀕危生物地圖 - 海洋守護者</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .navbar {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 10px 50px;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #map {
+            flex: 3;
+            height: 100%;
+        }
+
+        #info-panel {
+            flex: 1.2;
+            padding: 25px;
+            background: #f8f9fa;
+            border-left: 2px solid #ddd;
+            overflow-y: auto;
+        }
+
+        /* 資訊卡片動畫與樣式 */
+        .info-card {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .info-card h2 {
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+        }
+
+        .info-card p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #444;
+        }
+
+        /* 生物圖片樣式 */
+        .creature-img {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: none;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 15px;
+            background: #ffebeb;
+            color: #f5576c;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/water-transportation.png" alt="logo" width="30">
+            海洋守護者
+        </div>
+        <nav>
+            <ul class="nav-links" style="list-style:none;">
+                <li><a href="index.html" style="color:white; text-decoration:none;">返回首頁</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div style="display: flex; flex: 1;">
+        <div id="map"></div>
+        <div id="info-panel">
+            <div id="default-msg">
+                <h2>探索瀕危海洋生物</h2>
+                <p>點擊地圖上的藍色標記，深入了解台灣各海域珍稀生物的生存現狀與保育故事。</p>
+            </div>
+
+            <div id="detail-content" style="display: none;" class="info-card">
+                <img id="info-img" class="creature-img" src="" alt="生物圖片">
+                <h2 id="info-title"></h2>
+                <p id="info-desc"></p>
+                <div id="info-status" class="status-badge"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // 初始化地圖，設定中心點為台灣
+        const map = L.map('map').setView([23.7, 121], 7);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        // 1. 定義生物資料結構 (Data Structure)
+        const creatures = [
+            {
+                name: "中華白海豚",
+                pos: [24.3, 120.3],
+                img: "中華白海豚.jpg",
+                desc: "台灣西岸特有族群，數量極其稀少，截至到現在預估剩下50隻左右。因離岸風電噪音、棲地破壞及工業廢水，面臨絕種危機。",
+                status: "保育等級：Ⅰ 級（瀕臨絕種）"
+            },
+            {
+                name: "綠蠵龜",
+                pos: [23.5, 119.5],
+                img: "綠蠵龜.jpg",
+                desc: "主要產卵地在澎湖望安。海洋廢棄漁網與塑膠垃圾是牠們最大的威脅。",
+                status: "保育等級：Ⅰ 級（瀕臨絕種）"
+            },
+            {
+                name: "抹香鯨",
+                pos: [24.0, 121.7],
+                img: "抹香鯨.jpg",
+                desc: "花蓮與台東東部深海常見。抹香鯨以魷魚為主食，常誤將漂浮的塑膠袋當作水母或魷魚吞食。",
+                status: "保育等級：Ⅱ 級（珍貴稀有）"
+            },
+            {
+                name: "鯨鯊 (豆腐鯊)",
+                pos: [24.8, 121.9],
+                img: "鯨鯊.jpg",
+                desc: "宜蘭（蘇澳）曾是捕撈和販售鯨鯊（豆腐鯊）的重要地區，但因其瀕危處境，台灣已實施總量管制，近年全面禁止商業捕撈和販售，違者重罰。",
+                status: "保育等級：Ⅰ 級（瀕臨絕種）"
+            },
+            {
+                name: "曲紋唇魚 (龍王鯛)",
+                pos: [22.6, 121.5],
+                img: "曲紋唇魚.jpg",
+                desc: "蘭嶼及綠島海域重要的「珊瑚礁魚王」",
+                status: "保育等級：Ⅱ 級（珍貴稀有）"
+            },
+        ];
+
+        // 2. 迴圈產生標記並綁定點擊事件 (Event Listener)
+        creatures.forEach(c => {
+            const marker = L.marker(c.pos).addTo(map);// 使用 Leaflet 函式庫
+
+            // 點擊標記觸發更新右側面板
+            marker.on('click', function () {
+                // 隱藏預設提示
+                document.getElementById('default-msg').style.display = 'none';
+                // 顯示詳情卡片
+                document.getElementById('detail-content').style.display = 'block';
+
+                // 動態更新內容
+                const imgTag = document.getElementById('info-img');
+                imgTag.src = c.img;
+                imgTag.style.display = 'block';
+
+                document.getElementById('info-title').innerText = c.name;
+                document.getElementById('info-desc').innerText = c.desc;
+                document.getElementById('info-status').innerText = c.status;
+
+                // 開啟地圖小彈窗
+                this.bindPopup(`<b>${c.name}</b>`).openPopup();
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>珊瑚白化模擬 - 海洋守護者</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            background-color: #f0f4f8;
+        }
+
+        .coral-card-img {
+            max-height: 500px;
+            object-fit: cover;
+            transition: filter 0.8s ease;
+        }
+
+        .temp-display {
+            font-size: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="logo"><img src="https://img.icons8.com/ios-filled/50/ffffff/water-transportation.png" alt="logo"
+                width="30">
+            海洋守護者</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">返回首頁</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-5">
+                    <h1 class="display-5 fw-bold text-primary">氣候變遷：珊瑚白化模擬</h1>
+                    <p class="lead text-muted">拖動滑桿模擬海水溫度上升，觀察珊瑚礁生態的即時變化。</p>
+                </div>
+
+                <div class="card shadow-lg border-0 mb-4">
+                    <div class="overflow-hidden rounded-top">
+                        <img id="coral-img" src="珊瑚.jpeg" class="card-img-top coral-card-img" alt="珊瑚生態">
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title mb-0">珊瑚礁健康狀態指標</h5>
+                            <span id="health-text" class="fw-bold text-success">100% 健康</span>
+                        </div>
+                        <div class="progress" style="height: 20px;">
+                            <div id="health-bar"
+                                class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                                role="progressbar" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0 p-4 text-center">
+                    <div class="mb-4">
+                        <label for="temp-slider" class="form-label h4 mb-3">
+                            模擬海水溫度：<span id="temp-val" class="text-success fw-bold temp-display">26</span>°C
+                        </label>
+
+                        <input type="range" class="form-range" id="temp-slider" min="23" max="32" value="26" step="1"
+                            list="temp-markers">
+
+                        <datalist id="temp-markers">
+                            <option value="23" label="23°C"></option>
+                            <option value="26" label="舒適"></option>
+                            <option value="29" label="壓力"></option>
+                            <option value="32" label="白化"></option>
+                        </datalist>
+
+                        <div class="d-flex justify-content-between text-muted px-2 small mt-2">
+                            <span>安全範圍 (23-28°C)</span>
+                            <span class="text-danger">危險區 (>30°C)</span>
+                        </div>
+
+                        <div id="status-alert"
+                            class="alert alert-success d-flex align-items-center justify-content-center m-0 py-3"
+                            role="alert">
+                            <div id="warning-text">目前的溫度非常適合珊瑚生長</div>
+                        </div>
+                    </div>
+
+                    <p class="text-center mt-4 text-secondary small">
+                        根據研究，全球已有超過 70% 的珊瑚礁因水溫升高而消失
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <script src="script.js"></script>
+</body>
+
+</html>

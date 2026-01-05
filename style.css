@@ -1,0 +1,246 @@
+/* ---------------------------------------------------
+    1. 全域變數與重置 (Global Variables & Reset)
+--------------------------------------------------- */
+:root {
+    --primary-blue: #007bff;
+    --hero-gradient: linear-gradient(135deg, #007bff 0%, #00d4ff 100%);
+    --light-bg: #e8f5f1;
+    --white: #ffffff;
+    --gray-text: #666;
+    --success-green: #28a745;
+    --border-color: #ddd;
+    
+    /* 卡片漸層色彩 */
+    --card-blue: linear-gradient(180deg, #4facfe 0%, #00f2fe 100%);
+    --card-orange: linear-gradient(180deg, #f093fb 0%, #f5576c 100%);
+    --card-purple: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+    --card-green: linear-gradient(180deg, #43e97b 0%, #38f9d7 100%);
+}
+
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+body {
+    font-family: 'Noto Sans TC', "Microsoft JhengHei", Arial, sans-serif;
+    background-color: var(--light-bg);
+    color: #333;
+    line-height: 1.6;
+}
+
+/* ---------------------------------------------------
+    2. 導覽列 (Navbar)
+--------------------------------------------------- */
+.navbar {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    padding: 15px 5%; 
+    background-color: var(--primary-blue);
+    color: white; 
+    position: sticky; 
+    top: 0; 
+    z-index: 1000;
+}
+
+.logo { 
+    font-size: 22px; 
+    font-weight: bold; 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+}
+
+.nav-links { 
+    display: flex; 
+    list-style: none; 
+    gap: 20px; 
+    align-items: center; 
+}
+
+.nav-links a { 
+    color: white; 
+    text-decoration: none; 
+    font-size: 15px; 
+    opacity: 0.8; 
+    transition: 0.3s; 
+}
+
+.nav-links a:hover, .nav-links a.active { 
+    opacity: 1; 
+}
+
+.nav-btn { 
+    background: rgba(255,255,255,0.2); 
+    padding: 8px 15px; 
+    border-radius: 20px; 
+}
+
+/* ---------------------------------------------------
+    3. 首頁內容
+--------------------------------------------------- */
+.hero {
+    height: 70vh; 
+    background: var(--hero-gradient);
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    text-align: center; 
+    color: white;
+}
+
+.hero h1 { font-size: 48px; margin-bottom: 15px; }
+.hero p { font-size: 20px; margin-bottom: 30px; opacity: 0.9; }
+
+.btn-start {
+    background: white; 
+    color: var(--primary-blue);
+    padding: 12px 40px; 
+    border-radius: 30px;
+    text-decoration: none; 
+    font-weight: bold; 
+    transition: 0.3s;
+}
+
+.btn-start:hover { 
+    transform: translateY(-3px); 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
+}
+
+.container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 60px 0; }
+.section-title { text-align: center; font-size: 32px; margin-bottom: 40px; color: #444; }
+
+.topic-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 25px; 
+}
+
+.topic-card {
+    padding: 40px 20px; 
+    border-radius: 20px; 
+    color: white;
+    text-align: center; 
+    transition: 0.3s; 
+    cursor: pointer;
+}
+
+.topic-card:hover { transform: translateY(-10px); }
+.topic-card.blue { background: var(--card-blue); }
+.topic-card.orange { background: var(--card-orange); }
+.topic-card.purple { background: var(--card-purple); }
+.topic-card.green { background: var(--card-green); }
+.topic-card .icon { font-size: 40px; margin-bottom: 15px; }
+
+
+.mission { text-align: center; }
+.mission-text { max-width: 800px; margin: 0 auto 40px; font-size: 18px; color: #666; }
+.stat-grid { display: flex; justify-content: center; gap: 80px; }
+.stat-num { font-size: 36px; font-weight: bold; color: var(--primary-blue); display: block; }
+
+/* ---------------------------------------------------
+    4. 測驗頁面樣式 (Quiz UI)
+--------------------------------------------------- */
+.quiz-page {
+    width: 100%;           /* 確保容器佔滿全寬 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;    /* 讓所有子元素（標題與卡片）水平對齊中線 */
+    padding: 50px 20px;
+    box-sizing: border-box;
+}
+
+.quiz-header {
+    width: 100%;
+    text-align: center;     /* 確保標題文字在自己的容器內置中 */
+    margin-bottom: 30px;
+}
+
+.quiz-card {
+    background: var(--white);
+    width: 100%;
+    max-width: 800px;       /* 限制最大寬度，避免過寬 */
+    margin: 0 auto;         /* 關鍵：強制卡片在剩餘空間中左右自動分配平分 */
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.quiz-meta { display: flex; justify-content: space-between; color: var(--gray-text); margin-bottom: 10px; }
+
+.progress-container {
+    background: #eee;
+    height: 8px;
+    border-radius: 4px;
+    margin-bottom: 30px;
+}
+
+.progress-bar {
+    background: var(--success-green);
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.options-group { display: flex; flex-direction: column; gap: 15px; }
+
+.option-item {
+    padding: 15px 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 18px;
+}
+
+.option-item:hover { background-color: #f8f9fa; border-color: var(--primary-blue); }
+.option-item.selected { border-color: var(--primary-blue); background-color: #e7f1ff; }
+
+.submit-btn {
+    width: 100%;
+    margin-top: 30px;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #a0a8b3;
+    color: white;
+    font-size: 18px;
+    cursor: not-allowed;
+}
+
+.submit-btn.active { background-color: var(--primary-blue); cursor: pointer; }
+
+
+@keyframes coral-bleaching {
+    0% { filter: grayscale(0%) brightness(100%) saturate(100%); }
+    50% { filter: grayscale(50%) brightness(110%) saturate(50%); }
+    100% { filter: grayscale(100%) brightness(150%) saturate(0%); }
+}
+
+.bleaching-effect {
+    animation: coral-bleaching 5s ease-in-out forwards;
+}
+
+.coral-container .image-box img {
+    transition: filter 0.5s ease;
+}
+
+/* ---------------------------------------------------
+    5. 響應式優化 (Responsive Patch)
+--------------------------------------------------- */
+@media (max-width: 768px) {
+    .stat-grid { flex-direction: column; gap: 30px; }
+    .hero h1 { font-size: 36px; }
+}
+
+@media (max-width: 600px) {
+    .quiz-card { padding: 20px; }
+    .quiz-header h1 { font-size: 28px; }
+    .option-item { font-size: 16px; padding: 12px; }
+    .navbar { padding: 10px 15px; }
+    .logo { font-size: 18px; }
+    .nav-links { gap: 10px; }
+    .nav-links a { font-size: 13px; }
+}
